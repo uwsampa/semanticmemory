@@ -17,11 +17,12 @@ fi
 EXECUTABLE_SHORT="$1"; shift
 EXECUTABLE=$(type "$EXECUTABLE_SHORT" | sed -e 's/^.* //') || \
 	EXECUTABLE="$EXECUTABLE_SHORT"
-echo "Command: $EXECUTABLE_SHORT ($EXECUTABLE)"
+EXECUTABLE_ABBRV=$(echo "$EXECUTABLE_SHORT" | sed -e 's,^.*/,,')
+echo "Command: $EXECUTABLE_SHORT ($EXECUTABLE = '$EXECUTABLE_ABBRV')"
 echo "Args:    $*"
 
 # Set environment variables for gperftools
-export HEAPPFX="${ME}-${RANDOM}"
+export HEAPPFX="${EXECUTABLE_ABBRV}-${RANDOM}"
 export HEAPPROFILE="$HEAPPFX"
 
 if [ $OS = "Linux" ]; then
