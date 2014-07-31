@@ -1,9 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
 ME=$(basename $0)
+OS=$(uname -s)
 
 if [ $# -lt 1 ]; then
 	echo "Usage: ${ME} command [command_args]" >&2
+	if [ $OS = "Linux" ]; then
+		echo "Optionally set TCMALLOC=/path/to/libtcmalloc.so"
+	elif [ $OS = "Darwin" ]; then
+		echo "Optionally set TCMALLOC=/path/to/libtcmalloc.dylib"
+	fi
 	exit 1
 fi
 
@@ -16,12 +22,15 @@ echo "Args:    $*"
 export HEAPPFX="${ME}-${RANDOM}"
 export HEAPPROFILE="$HEAPPFX"
 
-OS=$(uname -s)
 if [ $OS = "Linux" ]; then
-	export LD_PRELOAD=/usr/local/lib/libtcmalloc.so
+	: ${TCMALLOC:=/usr/local/lib/libtcmalloc.so}
+	echo "Using tcmalloc from $TCMALLOC"
+	export LD_PRELOAD="$TCMALLOC"
 elif [ $OS = "Darwin" ]; then
 	# assume Homebrew
-	export DYLD_INSERT_LIBRARIES=/usr/local/Cellar/google-perftools/2.1/lib/libtcmalloc.dylib
+	: ${TCMALLOC:=/usr/local/Cellar/google-perftools/2.1/lib/libtcmalloc.dylib}
+	echo "Using tcmalloc from $TCMALLOC"
+	export DYLD_INSERT_LIBRARIES="$TCMALLOC"
 else
 	echo "Unknown OS '$OS'" >&2
 	exit 2
@@ -46,6 +55,11 @@ unset HEAPPROFILE
 
 # Everything executed OK; collect results
 HEAPTRACES=$(ls "$HEAPPFX".*.heap)
+if [ -z "$HEAPTRACES" ]; then
+	echo "No heap traces.  Did you set \$TCMALLOC?" >&2
+	exit 4
+fi
 echo "Heap traces are in $HEAPTRACES"
 
 pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPTRACES
+pprof --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPTRACES" > "$HEAPPFX".pdf
