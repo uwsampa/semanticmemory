@@ -1,4 +1,5 @@
 CC=clang
+CFLAGS=-g
 
 all: hellomalloc
 
