@@ -1,7 +1,7 @@
-CC=clang
+CC=gcc
 CFLAGS=-g
 
 all: hellomalloc
 
 clean:
-	$(RM) hellomalloc
+	$(RM) -r hellomalloc hellomalloc.dSYM
