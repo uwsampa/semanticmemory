@@ -14,8 +14,10 @@ if [ $# -lt 1 ]; then
 fi
 
 # Get the command to profile
-EXECUTABLE="$1"; shift
-echo "Command: $EXECUTABLE"
+EXECUTABLE_SHORT="$1"; shift
+EXECUTABLE=$(type "$EXECUTABLE_SHORT" | sed -e 's/^.* //') || \
+	EXECUTABLE="$EXECUTABLE_SHORT"
+echo "Command: $EXECUTABLE_SHORT ($EXECUTABLE)"
 echo "Args:    $*"
 
 # Set environment variables for gperftools
@@ -40,7 +42,7 @@ fi
 echo "Running program..."
 $EXECUTABLE $ARGS
 
-echo "Program completed."
+# XXX is this broken?
 if [ $? -ne 0 ]; then
 	echo "Program exited with nonzero exit code." >&2
 	exit 3
@@ -61,5 +63,5 @@ if [ -z "$HEAPTRACES" ]; then
 fi
 echo "Heap traces are in $HEAPTRACES"
 
-pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPTRACES
+pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPTRACES > "$HEAPPFX".txt
 pprof --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPTRACES" > "$HEAPPFX".pdf
