@@ -62,7 +62,13 @@ if [ -z "$HEAPTRACES" ]; then
 	echo "No heap traces.  Did you set \$TCMALLOC?" >&2
 	exit 4
 fi
-echo "Heap traces are in $HEAPTRACES"
+mkdir $HEAPPFX	#We want to put all the output in a separate directory
+mv $HEAPTRACES $HEAPPFX
+echo "Heap traces are in $HEAPPFX/$HEAPTRACES"
 
-pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPTRACES > "$HEAPPFX".txt
-pprof --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPTRACES" > "$HEAPPFX".pdf
+pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPPFX/$HEAPTRACES > "$HEAPPFX/$HEAPPFX".txt
+pprof --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".pdf
+pprof --callgrind --alloc_space --lines "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".callgrind
+callgrind_annotate --tree=caller --threshold=100 "$HEAPPFX/$HEAPPFX".callgrind > "$HEAPPFX/$HEAPPFX".results
+
+# TODO parse the callgrind output for the callers of things like malloc
