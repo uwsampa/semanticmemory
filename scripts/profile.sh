@@ -20,10 +20,12 @@ EXECUTABLE=$(type "$EXECUTABLE_SHORT" | sed -e 's/^.* //') || \
 EXECUTABLE_ABBRV=$(echo "$EXECUTABLE_SHORT" | sed -e 's,^.*/,,')
 echo "Command: $EXECUTABLE_SHORT ($EXECUTABLE = '$EXECUTABLE_ABBRV')"
 echo "Args:    $*"
+ARGS=$*
 
 # Set environment variables for gperftools
 export HEAPPFX="${EXECUTABLE_ABBRV}-${RANDOM}"
 export HEAPPROFILE="$HEAPPFX"
+export LD_LIBRARY_PATH=/usr/lib/debug/lib/
 
 if [ $OS = "Linux" ]; then
 	: ${TCMALLOC:=/usr/local/lib/libtcmalloc.so}
@@ -66,9 +68,10 @@ mkdir $HEAPPFX	#We want to put all the output in a separate directory
 mv $HEAPTRACES $HEAPPFX
 echo "Heap traces are in $HEAPPFX/$HEAPTRACES"
 
-pprof --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPPFX/$HEAPTRACES > "$HEAPPFX/$HEAPPFX".txt
-pprof --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".pdf
-pprof --callgrind --alloc_space --lines "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".callgrind
+pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPPFX/$HEAPTRACES > "$HEAPPFX/$HEAPPFX".txt
+pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX"_space.pdf
+pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --pdf --alloc_objects --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX"_objects.pdf
+pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --callgrind --alloc_space --lines "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".callgrind
 callgrind_annotate --tree=caller --threshold=100 "$HEAPPFX/$HEAPPFX".callgrind > "$HEAPPFX/$HEAPPFX".results
 
 # TODO parse the callgrind output for the callers of things like malloc
