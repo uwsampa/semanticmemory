@@ -70,9 +70,8 @@ echo "Heap traces are in $HEAPPFX/$HEAPTRACES"
 
 pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --alloc_space --show_bytes --text --addresses "$EXECUTABLE" $HEAPPFX/$HEAPTRACES > "$HEAPPFX/$HEAPPFX"_space.txt
 pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --alloc_objects --text --addresses "$EXECUTABLE" $HEAPPFX/$HEAPTRACES > "$HEAPPFX/$HEAPPFX"_objects.txt
+#TODO do we need the rest of these anymore?
 pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --pdf --alloc_space --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX"_space.pdf
 pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --pdf --alloc_objects --addresses "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX"_objects.pdf
 pprof --add_lib=/usr/local/lib/libtcmalloc.so --add_lib=/lib/x86_64-linux-gnu/libc.so.6 --lib_prefix=/usr/lib/debug/lib/,/usr/lib/debug/lib/x86_64-linux-gnu/ --callgrind --alloc_space --lines "$EXECUTABLE" "$HEAPPFX/$HEAPTRACES" > "$HEAPPFX/$HEAPPFX".callgrind
 callgrind_annotate --tree=caller --threshold=100 "$HEAPPFX/$HEAPPFX".callgrind > "$HEAPPFX/$HEAPPFX".results
-
-# TODO parse the callgrind output for the callers of things like malloc
