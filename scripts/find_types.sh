@@ -4,10 +4,10 @@
 # GLOBAL VARIABLES (FOR USE BY FUNCTIONS)
 #*****************************************************************************
 #Variables to make a queue
-declare -a var_queue
-dequeue_index=0
-queue_size=0
-dequeue_result=""
+declare -a VAR_QUEUE
+DEQUEUE_INDEX=0
+QUEUE_SIZE=0
+DEQUEUE_RESULT=""
 
 #*****************************************************************************
 # FUNCTION DEFINITIONS
@@ -15,54 +15,54 @@ dequeue_result=""
 queue_enqueue()
 {
 	echo "Enqueue: $1"
-	entry="$1"
-	var_queue=("${var_queue[@]}" "$entry")
-	(( queue_size++ ))
-	echo "Size: $queue_size"
+	ENTRY="$1"
+	VAR_QUEUE=("${VAR_QUEUE[@]}" "$ENTRY")
+	(( QUEUE_SIZE++ ))
+	echo "Size: $QUEUE_SIZE"
 	echo
 }
 
-#result is pulled off front of queue and assigned to dequeue_result
+#result is pulled off front of queue and assigned to DEQUEUE_RESULT
 queue_dequeue()
 {
-	if [[ queue_size -gt 0 ]]; then
-		dequeue_result=${var_queue[dequeue_index]}
-		#unset var_queue[dequeue_index] #seems to set return value to null as well
-		(( dequeue_index++ ))
-		(( queue_size-- ))
+	if [[ QUEUE_SIZE -gt 0 ]]; then
+		DEQUEUE_RESULT=${VAR_QUEUE[DEQUEUE_INDEX]}
+		#unset VAR_QUEUE[DEQUEUE_INDEX] #seems to set return value to null as well
+		(( DEQUEUE_INDEX++ ))
+		(( QUEUE_SIZE-- ))
 	else
-		unset dequeue_result
+		unset DEQUEUE_RESULT
 		echo "Nothing"
 	fi
-	echo "Dequeue: $dequeue_result"
-	echo "Size: $queue_size"
+	echo "Dequeue: $DEQUEUE_RESULT"
+	echo "Size: $QUEUE_SIZE"
 	echo
 }
 
 #only prints parts of queue in current bounds
 print_queue()
 {
-	output_string="Queue:"
-	position=$dequeue_index
-	while [[ position -le $(( $queue_size + $dequeue_index - 1 )) ]]
+	OUTPUT_STRING="Queue:"
+	POSITION=$DEQUEUE_INDEX
+	while [[ POSITION -le $(( $QUEUE_SIZE + $DEQUEUE_INDEX - 1 )) ]]
 	do
-		output_string="$output_string ${var_queue[position]}"
-		(( position++ ))
+		OUTPUT_STRING="$OUTPUT_STRING ${VAR_QUEUE[POSITION]}"
+		(( POSITION++ ))
 	done
-	echo "$output_string"
+	echo "$OUTPUT_STRING"
 }
 
 #prints entire queue that exists
 print_queue_whole()
 {
-	echo "Whole Queue: ${var_queue[@]}"
+	echo "Whole Queue: ${VAR_QUEUE[@]}"
 }
 
 clear_queue()
 {
-	unset var_queue
-	queue_size=0
-	dequeue_index=0
+	unset VAR_QUEUE
+	QUEUE_SIZE=0
+	DEQUEUE_INDEX=0
 }
 
 gdb_command()
@@ -91,15 +91,15 @@ log_command()
 
 log_gdb_output()
 {
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
-		echo "$var" >&5
+		echo "$VAR" >&5
 	done
 }
 
 flush_gdb_output()
 {
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		true #do nothing
 	done
@@ -110,6 +110,69 @@ separator()
 	log_command "--------------------------------------------------"
 }
 
+#should probably use grep or sed for better regex matching
+gdb_count_types()
+{
+	local POINTERS=0
+	local CHARS=0
+	local SHORTS=0
+	local INTS=0
+	local LONGS=0
+	local LONGLONGS=0
+	local FLOATS=0
+	local DOUBLES=0
+	local BOOLS=0
+	local UINTS=0
+	while read -t 0.1 VAR <&4
+	do
+		case "$VAR" in
+		*" *"*|*"* "*)
+			(( POINTERS++ ))
+			;;
+		*"char "*)
+			(( CHARS++ ))
+			;;
+		*"short "*)
+			(( SHORTS++ ))
+			;;
+		*"uint"[0-9]*"_t "*)
+			(( UINTS++ ))
+			;;
+		*"int "*)
+			(( INTS++ ))
+			;;
+		*"long long"*)
+			(( LONGLONGS++ ))
+			;;
+		*"long "*)
+			(( LONGS++ ))
+			;;
+		*"float "*)
+			(( FLOATS++ ))
+			;;
+		*"double "*)
+			(( DOUBLES++ ))
+			;;
+		*"_Bool "*)
+			(( BOOLS++ ))
+			;;
+		esac
+		echo "$VAR" >&5
+	done
+	echo "###" >&5
+	echo "Number pointers: $POINTERS" >&5
+	echo "Number chars: $CHARS" >&5
+	echo "Number shorts: $SHORTS" >&5
+	echo "Number ints: $INTS" >&5
+	echo "Number longs: $LONGS" >&5
+	echo "Number long longs: $LONGLONGS" >&5
+	echo "Number floats: $FLOATS" >&5
+	echo "Number doubles: $DOUBLES" >&5
+	echo "Number _Bools: $BOOLS" >&5
+	echo "Number various uint_t types: $UINTS" >&5
+	echo "###" >&5
+}
+
 gdb_var_size()
 {
 	#TODO want to differentiate between pointers and flat variables
@@ -118,10 +181,10 @@ gdb_var_size()
 	if [[ -n "$1" ]]; then
 		log_command "###"
 		gdb_command_nolog "print sizeof($1)"
-		while read -t 0.1 var <&4
+		while read -t 0.1 VAR <&4
 		do
 			#pull everything off the gdb output before the actual value we want
-			echo "$var" | sed -e 's/$[1-9].*= //' >&5
+			echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 		done
 		log_command "###"
 	fi		
@@ -132,53 +195,66 @@ gdb_primitve_size()
 	log_command "---Primitive types---"
 	log_command "###"
 	gdb_command "print sizeof(void*)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	gdb_command "print sizeof(char)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
+	done
+	log_command "###"
+	gdb_command "print sizeof(short)"
+	while read -t 0.1 VAR <&4
+	do
+		#pull everything off the gdb output before the actual value we want
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	gdb_command "print sizeof(int)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	gdb_command "print sizeof(long int)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	gdb_command "print sizeof(long long)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	gdb_command "print sizeof(float)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
-	
 	gdb_command "print sizeof(double)"
-	while read -t 0.1 var <&4
+	while read -t 0.1 VAR <&4
 	do
 		#pull everything off the gdb output before the actual value we want
-		echo "$var" | sed -e 's/$[1-9].*= //' >&5
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
+	done
+	log_command "###"
+	gdb_command "print sizeof(_Bool)"
+	while read -t 0.1 VAR <&4
+	do
+		#pull everything off the gdb output before the actual value we want
+		echo "$VAR" | sed -e 's/$[1-9].*= //' >&5
 	done
 	log_command "###"
 	separator
@@ -186,14 +262,13 @@ gdb_primitve_size()
 
 gdb_var_entries()
 {
-	while read entry <&6
+	while read ENTRY <&6
 	do
-		#dont want empty lines
-		if [ -n "$entry" ]; then
-			gdb_command "ptype $entry"
-			log_gdb_output
-			gdb_var_size $entry
-			#after each 
+		if [ -n "$ENTRY" ]; then
+			gdb_command "ptype $ENTRY"
+			gdb_count_types
+			#TODO recurse through several layers of structs if needed
+			gdb_var_size "$ENTRY"
 			separator
 		fi
 	done
@@ -236,7 +311,6 @@ exec 6< $VARFILE
 flush_gdb_output
 gdb_primitve_size
 gdb_var_entries
-#TODO recurse through several layers of structs if needed
 
 gdb_command_nolog "quit"
 
