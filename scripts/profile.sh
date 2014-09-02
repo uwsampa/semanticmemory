@@ -25,7 +25,7 @@ ARGS=$*
 # Set environment variables for gperftools
 export HEAPPFX="${EXECUTABLE_ABBRV}-${RANDOM}"
 export HEAPPROFILE="$HEAPPFX"
-export LD_LIBRARY_PATH=/usr/lib/debug/lib/
+export LD_LIBRARY_PATH=/usr/lib/debug/lib/:$LD_LIBRARY_PATH
 
 if [ $OS = "Linux" ]; then
 	: ${TCMALLOC:=/usr/local/lib/libtcmalloc.so}
