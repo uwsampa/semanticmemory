@@ -1,4 +1,17 @@
 #!/bin/bash
+#To use:
+#	./find_types.sh /path/to/binary /file/containing/variables [output_file]"
+#
+#The file containing variables is just a text file with the name of a variable
+#	on each line. Can also use the name of a data type or typedef
+#
+#To find data on memory that is referenced by pointer, put * in front of variable name
+#	Example: (*var_name) or (*var_name).sub_var
+#
+#The output file returns the breakdown of data types, and their size. It also attempts
+#	to find the number of some basic data types that make up a struct, but you need
+#	to verify that these numbers are correct. The size returned can be wrong if the data type
+#	is defined as something weird to be super compact.
 
 #*****************************************************************************
 # GLOBAL VARIABLES (FOR USE BY FUNCTIONS)
@@ -280,7 +293,7 @@ gdb_var_entries()
 
 ME=$(basename $0)
 if [[ $# -lt 2 ]]; then
-	echo "Usage: ${ME} /path/to/binary /file/containing/variables/ [output_file]" >&2
+	echo "Usage: ${ME} /path/to/binary /file/containing/variables [output_file]" >&2
 	exit 1
 fi
 
