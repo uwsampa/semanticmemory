@@ -1,0 +1,5 @@
+Applications need to be statically compiled with debug symbols.
+
+To build ImageMagick with debug symbols:
+
+./configure CPPFLAGS=-DDEBUG CFLAGS="-g -O0 -static" CXXFLAGS="-g -O0 -static" LDFLAGS="-g -static"
