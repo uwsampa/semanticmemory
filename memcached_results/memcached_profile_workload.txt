@@ -1,0 +1,27 @@
+Profiling memcached-1.4.20, built with debug symbols
+
+GperfTools:
+/home/emackay/Projects/Profiling/semanticmemory/scripts/profile.sh ~/memcached-1.4.20/memcached -A -p 11211
+
+Finding variable types:
+/home/emackay/Projects/Profiling/semanticmemory/scripts/find_types.sh ~/memcached-1.4.20/memcached /file/containing/variables [output_file]
+
+Workload (requires libmemcached, a memcached tool suite):
+memcslap --servers=127.0.0.1:11211 --concurrency=100 --execute-number=10000 --initial-load=10000 --flush
+
+Setup:
+Using gperftools 2.2, installed in default location. Running on Ubuntu 14.04 on x86_64.
+
+Procedure:
+Run the command to start memcached under the gperftools profiler from whatever you directory you want the results directory to appear in. In another terminal, run the memcslap command (or whatever flavor of memslap you have). Wait for it to complete. Then run 'telnet localhost 11211", and then send "shutdown" over telnet and then quit out of telnet. The memcached process will shutdown and then the profiler will create several files in a directory inside the working directory labelled 'memcached-<some random number>'. The random number attached to the directory name is to make a unique set of results for each run of memcached. Inside the results directory there will be several files. The 2 files of interest are 'memcached-<random number again>_space.txt' and 'memcached-<random number again>_objects.txt'. These list the different call sites in the program that allocate memory, ranked by the amount of bytes allocated or the number of objects allocated, respectively. The thing to remember about the text files is that they show the totals for every node in the allocation call graph. This means that if a node is the root of 2 trees that lead to separate allocaiton sites, the root node will show the sum of the 2 trees as its total. To make sure that you are only looking at the leaf nodes of the call graph, where the allocations are actually taking place, you need to look at the pdf files containing pictures of the call graph. Look for leaf nodes in the graph, and if the leaf nodes are something generic like a malloc wrapper, go up a level in the tree to find a node with more semantic meaning. For each of the call sites you want to investigate, go to the line number in the source file indicated by the _space.txt or _objects.txt file and find whatever the variable name is that is being assigned the pointer to memory being allocated.
+
+You must use your human mind to determine what this variable signifies in terms of the high-level data kind. For the primitive data types, read on.
+
+Add each interesting variable name to the variables text file you want to pass to the find_types.sh script (put a * in front of the variable name if you want to look at the actual type being pointed to and not the pointer itself). You can also put type or struct names instead of variable names. After running the find_types.sh script the output file will contain the breakdown of each of the variables you wanted and their size in bytes. Many of these entries will be structs containing other structs or typedefs or unions. For each of these entries you must add these entries to the variables text file again (or a different file to keep things organized), and rerun the script. Manually add up the number of ints, chars, etc that make up each data type and multiply by the number of objects allocated to give you the total memory used by that data type consisting of the different primitive types. Sometimes the objects are allocated as arrays of objects, so you might want to instead look at the total bytes allocated for that call site and divide by the size of the data type, giving you the actual number of these types allocated. Add up all the memory used by the most significant contributors to memory allocation and you get the total breakdown of primitive types.
+
+Notes:
+The size returned in the output can be wrong if the data type is defined as something weird to be super compact. Saw this in memcached with the 'item' type. Size return was 48 but adding up the size of the members of the struct gave a total of 50. Used 50 since that also agreed with profiling results.
+
+Sometimes structs have functions defined inside them or enumerated types. These portions of memory allocation I just left as 'other', since these are not comparable against anything. Enumerated types are especially problematic to compare since the size of the underlying primitive type is determined by the number of entries in enumerated type definition (though it's usually a byte).
+
+For unions, I used the data type that took up the most memory. Example: union {char, int}. I would calculate this as an int.

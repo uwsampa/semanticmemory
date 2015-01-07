@@ -1,0 +1,92 @@
+Total: 1034 objects
+     117  11.3%  11.3%      117  11.3% 00007f8ead937757 evmap_io_add ??:?
+     111  10.7%  22.1%      111  10.7% 0000000000406ca5 conn_new /home/emackay/memcached-1.4.20/memcached.c:354
+     111  10.7%  32.8%      111  10.7% 0000000000406d1e conn_new /home/emackay/memcached-1.4.20/memcached.c:379
+     111  10.7%  43.5%      111  10.7% 0000000000406d34 conn_new /home/emackay/memcached-1.4.20/memcached.c:380
+     111  10.7%  54.3%      111  10.7% 0000000000406d4a conn_new /home/emackay/memcached-1.4.20/memcached.c:381
+     111  10.7%  65.0%      111  10.7% 0000000000406d60 conn_new /home/emackay/memcached-1.4.20/memcached.c:382
+     111  10.7%  75.7%      111  10.7% 0000000000406d76 conn_new /home/emackay/memcached-1.4.20/memcached.c:383
+     111  10.7%  86.5%      111  10.7% 0000000000406d8c conn_new /home/emackay/memcached-1.4.20/memcached.c:385
+      64   6.2%  92.6%       64   6.2% 000000000040ddb8 memory_allocate (inline) /home/emackay/memcached-1.4.20/slabs.c:376
+      17   1.6%  94.3%       17   1.6% 00007f8ead9374a1 bufferevent_rate_limit_group_reset_totals ??:?
+       5   0.5%  94.8%        5   0.5% 00007f8ead92a755 event_base_priority_init ??:?
+       5   0.5%  95.3%        5   0.5% 00007f8ead92b2aa event_base_new_with_config ??:?
+       5   0.5%  95.7%        5   0.5% 00007f8ead93c0e5 _event_strlcpy ??:?
+       5   0.5%  96.2%        5   0.5% 00007f8ead93c104 _event_strlcpy ??:?
+       5   0.5%  96.7%        5   0.5% 00007f8eadde4e55 __GI__dl_make_stack_executable /build/buildd/eglibc-2.19/elf/../sysdeps/unix/sysv/linux/dl-execstack.c:49
+       4   0.4%  97.1%        4   0.4% 0000000000412237 setup_thread (inline) /home/emackay/memcached-1.4.20/thread.c:348
+       4   0.4%  97.5%        4   0.4% 0000000000412e19 cache_create /home/emackay/memcached-1.4.20/cache.c:23
+       4   0.4%  97.9%        4   0.4% 0000000000412e36 cache_create /home/emackay/memcached-1.4.20/cache.c:25
+       4   0.4%  98.3%        4   0.4% 00007f8ead3c068a underflow_value /build/buildd/eglibc-2.19/wcsmbs/../stdlib/strtod_l.c:202
+       3   0.3%  98.5%        3   0.3% 000000000040d1a7 grow_slab_list /home/emackay/memcached-1.4.20/slabs.c:179 (discriminator 3)
+       2   0.2%  98.7%        2   0.2% 00007f8ead40417e __GI_statvfs :?
+       2   0.2%  98.9%        2   0.2% 00007f8ead404386 __open_nocancel /build/buildd/eglibc-2.19/io/../sysdeps/unix/syscall-template.S:83
+       2   0.2%  99.1%        2   0.2% 00007f8ead450647 __strcmp_sse42 /build/buildd/eglibc-2.19/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:629
+       1   0.1%  99.2%        1   0.1% 0000000000403dc8 conn_init (inline) /home/emackay/memcached-1.4.20/memcached.c:321
+       1   0.1%  99.3%        1   0.1% 0000000000410ceb assoc_expand (inline) /home/emackay/memcached-1.4.20/assoc.c:129
+       1   0.1%  99.4%        1   0.1% 0000000000410e38 assoc_init /home/emackay/memcached-1.4.20/assoc.c:67
+       1   0.1%  99.5%        1   0.1% 00000000004117c4 cqi_new (inline) /home/emackay/memcached-1.4.20/thread.c:264
+       1   0.1%  99.6%        1   0.1% 0000000000412115 thread_init /home/emackay/memcached-1.4.20/thread.c:810
+       1   0.1%  99.7%        1   0.1% 0000000000412170 thread_init /home/emackay/memcached-1.4.20/thread.c:821
+       1   0.1%  99.8%        1   0.1% 00007f8ead3a629d __GI___strcasecmp_l /build/buildd/eglibc-2.19/string/../sysdeps/x86_64/multiarch/../strcmp.S:698
+       1   0.1%  99.9%        1   0.1% 00007f8ead3a6e75 __GI___strcasecmp_l /build/buildd/eglibc-2.19/string/../sysdeps/x86_64/multiarch/../strcmp.S:1420
+       1   0.1% 100.0%        1   0.1% 00007f8ead928502 event_add ??:?
+       0   0.0% 100.0%        8   0.8% 0000000000402acb server_socket /home/emackay/memcached-1.4.20/memcached.c:4441
+       0   0.0% 100.0%        1   0.1% 0000000000402ecc server_socket /home/emackay/memcached-1.4.20/memcached.c:4544 (discriminator 3)
+       0   0.0% 100.0%       17   1.6% 0000000000402eeb server_socket /home/emackay/memcached-1.4.20/memcached.c:4549
+       0   0.0% 100.0%       26   2.5% 0000000000402f67 server_sockets /home/emackay/memcached-1.4.20/memcached.c:4569
+       0   0.0% 100.0%        4   0.4% 0000000000403c2f main /home/emackay/memcached-1.4.20/memcached.c:5522
+       0   0.0% 100.0%        1   0.1% 0000000000403d6b main /home/emackay/memcached-1.4.20/memcached.c:5526
+       0   0.0% 100.0%        1   0.1% 0000000000403dc8 main /home/emackay/memcached-1.4.20/memcached.c:5527
+       0   0.0% 100.0%       46   4.4% 0000000000403e12 main /home/emackay/memcached-1.4.20/memcached.c:5539
+       0   0.0% 100.0%        1   0.1% 0000000000403e17 main /home/emackay/memcached-1.4.20/memcached.c:5541
+       0   0.0% 100.0%        1   0.1% 0000000000403e47 main /home/emackay/memcached-1.4.20/memcached.c:5554
+       0   0.0% 100.0%        4   0.4% 0000000000404571 main /home/emackay/memcached-1.4.20/memcached.c:5599 (discriminator 1)
+       0   0.0% 100.0%       22   2.1% 00000000004045a2 main /home/emackay/memcached-1.4.20/memcached.c:5584 (discriminator 1)
+       0   0.0% 100.0%       80   7.7% 00000000004049cd _start ??:?
+       0   0.0% 100.0%        1   0.1% 0000000000405238 clock_handler /home/emackay/memcached-1.4.20/memcached.c:4722
+       0   0.0% 100.0%       67   6.5% 0000000000406885 process_update_command /home/emackay/memcached-1.4.20/memcached.c:3084
+       0   0.0% 100.0%      126  12.2% 0000000000406b81 conn_new /home/emackay/memcached-1.4.20/memcached.c:469
+       0   0.0% 100.0%       67   6.5% 000000000040854f process_command /home/emackay/memcached-1.4.20/memcached.c:3437
+       0   0.0% 100.0%       67   6.5% 0000000000409c04 drive_machine (inline) /home/emackay/memcached-1.4.20/memcached.c:4108
+       0   0.0% 100.0%       67   6.5% 0000000000409c04 event_handler /home/emackay/memcached-1.4.20/memcached.c:4353
+       0   0.0% 100.0%       67   6.5% 0000000000409c04 try_read_command (inline) /home/emackay/memcached-1.4.20/memcached.c:3763
+       0   0.0% 100.0%        3   0.3% 000000000040dce2 do_slabs_newslab /home/emackay/memcached-1.4.20/slabs.c:202 (discriminator 2)
+       0   0.0% 100.0%       64   6.2% 000000000040ddb8 do_slabs_newslab /home/emackay/memcached-1.4.20/slabs.c:202
+       0   0.0% 100.0%       67   6.5% 000000000040e646 do_slabs_alloc (inline) /home/emackay/memcached-1.4.20/slabs.c:235
+       0   0.0% 100.0%       67   6.5% 000000000040e646 slabs_alloc /home/emackay/memcached-1.4.20/slabs.c:404
+       0   0.0% 100.0%        2   0.2% 000000000040f203 do_item_alloc /home/emackay/memcached-1.4.20/items.c:196
+       0   0.0% 100.0%       65   6.3% 000000000040f2d3 do_item_alloc /home/emackay/memcached-1.4.20/items.c:158
+       0   0.0% 100.0%        1   0.1% 0000000000410ceb assoc_maintenance_thread /home/emackay/memcached-1.4.20/assoc.c:257
+       0   0.0% 100.0%        1   0.1% 0000000000411174 start_assoc_maintenance_thread /home/emackay/memcached-1.4.20/assoc.c:275
+       0   0.0% 100.0%      953  92.2% 000000000041125c worker_libevent /home/emackay/memcached-1.4.20/thread.c:386
+       0   0.0% 100.0%      886  85.7% 0000000000411331 thread_libevent_process /home/emackay/memcached-1.4.20/thread.c:409
+       0   0.0% 100.0%        1   0.1% 00000000004117c4 dispatch_conn_new /home/emackay/memcached-1.4.20/thread.c:450
+       0   0.0% 100.0%       16   1.5% 00000000004121e1 setup_thread (inline) /home/emackay/memcached-1.4.20/thread.c:331
+       0   0.0% 100.0%       16   1.5% 00000000004121e1 thread_init /home/emackay/memcached-1.4.20/thread.c:839
+       0   0.0% 100.0%        8   0.8% 0000000000412223 setup_thread (inline) /home/emackay/memcached-1.4.20/thread.c:342
+       0   0.0% 100.0%        8   0.8% 0000000000412223 thread_init /home/emackay/memcached-1.4.20/thread.c:839
+       0   0.0% 100.0%        4   0.4% 0000000000412237 thread_init /home/emackay/memcached-1.4.20/thread.c:839
+       0   0.0% 100.0%       12   1.2% 0000000000412293 setup_thread (inline) /home/emackay/memcached-1.4.20/thread.c:359
+       0   0.0% 100.0%       12   1.2% 0000000000412293 thread_init /home/emackay/memcached-1.4.20/thread.c:839
+       0   0.0% 100.0%        4   0.4% 00000000004122e8 create_worker (inline) /home/emackay/memcached-1.4.20/thread.c:310 (discriminator 2)
+       0   0.0% 100.0%        4   0.4% 00000000004122e8 thread_init /home/emackay/memcached-1.4.20/thread.c:846 (discriminator 2)
+       0   0.0% 100.0%        4   0.4% 0000000000412e23 cache_create /home/emackay/memcached-1.4.20/cache.c:23
+       0   0.0% 100.0%       80   7.7% 00007f8ead358ec4 str_to_mpn.isra.0 /build/buildd/eglibc-2.19/stdlib/strtod_l.c:401
+       0   0.0% 100.0%        1   0.1% 00007f8ead405fd7 internal_fallocate /build/buildd/eglibc-2.19/io/../sysdeps/posix/posix_fallocate.c:42
+       0   0.0% 100.0%        1   0.1% 00007f8ead40607d internal_fallocate /build/buildd/eglibc-2.19/io/../sysdeps/posix/posix_fallocate.c:71
+       0   0.0% 100.0%        4   0.4% 00007f8ead407c5c fts_safe_changedir /build/buildd/eglibc-2.19/io/fts.c:1133
+       0   0.0% 100.0%        2   0.2% 00007f8ead408443 fts_close /build/buildd/eglibc-2.19/io/fts.c:260 (discriminator 1)
+       0   0.0% 100.0%        2   0.2% 00007f8ead408528 fts_read /build/buildd/eglibc-2.19/io/fts.c:433
+       0   0.0% 100.0%      954  92.3% 00007f8ead43238c inet_ntop6 /build/buildd/eglibc-2.19/resolv/inet_ntop.c:172
+       0   0.0% 100.0%        2   0.2% 00007f8ead4508b3 __strcmp_sse42 /build/buildd/eglibc-2.19/string/../sysdeps/x86_64/multiarch/strcmp-sse42.S:896
+       0   0.0% 100.0%      954  92.3% 00007f8ead705181 __do_cancel (inline) /build/buildd/eglibc-2.19/nptl/pthreadP.h:281
+       0   0.0% 100.0%      954  92.3% 00007f8ead705181 __pthread_setcancelstate /build/buildd/eglibc-2.19/nptl/pthread_setcancelstate.c:61
+       0   0.0% 100.0%        5   0.5% 00007f8ead705da0 _L_lock_36 sem_close.c:?
+       0   0.0% 100.0%        2   0.2% 00007f8ead70aa8f __invoke_dynamic_linker__ ??:0
+       0   0.0% 100.0%      134  13.0% 00007f8ead9285de event_add ??:?
+       0   0.0% 100.0%      953  92.2% 00007f8ead928f23 event_base_loop ??:?
+       0   0.0% 100.0%        5   0.5% 00007f8ead92b464 event_base_new_with_config ??:?
+       0   0.0% 100.0%       10   1.0% 00007f8ead92b574 event_base_new_with_config ??:?
+       0   0.0% 100.0%       20   1.9% 00007f8ead92b67a event_init ??:?
+       0   0.0% 100.0%       17   1.6% 00007f8ead9376e3 evmap_io_add ??:?
