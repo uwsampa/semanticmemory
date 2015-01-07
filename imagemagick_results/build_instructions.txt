@@ -3,3 +3,5 @@ Applications need to be statically compiled with debug symbols.
 To build ImageMagick with debug symbols:
 
 ./configure CPPFLAGS=-DDEBUG CFLAGS="-g -O0 -static" CXXFLAGS="-g -O0 -static" LDFLAGS="-g -static"
+
+Run the ImageMagick "convert" tool to do canny edge detection on the image I made. Can't remember what the commands for that are...
